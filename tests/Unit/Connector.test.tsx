@@ -243,9 +243,11 @@ const mockResponse: Response = {
                     try{
                         await con.Connect();
                         expect(RaspisanieConnector.SesionId).toBe('');
-                    }catch(er){
-                        console.log(er);
+                    }catch(er){                        
                         expect(RaspisanieConnector.SesionId).toBe('');
+                        const err=er as any;
+                        expect(err.message).toBe("Не корректные данные для авторизации");
+                        expect(err['cause']).toStrictEqual({data: null, error:{"code": 401, "description": "Не корректные данные для авторизации","status": "UNAUTHORIZED"}});
                     } 
                     semafore.ErrCon.end=true; 
                     if(semafore.ErrCon.onEnd)semafore.ErrCon.onEnd();

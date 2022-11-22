@@ -167,7 +167,7 @@ export interface IURLs{
      */
     Validation:string;
      /**
-     * Относительный адрес здания
+     * Относительный адрес для получения справочника по зданиям
      */
     Building:string;
      /**
