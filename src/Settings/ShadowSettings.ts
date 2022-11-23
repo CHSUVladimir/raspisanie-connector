@@ -1,4 +1,5 @@
 import { IAuthPost, IURLs } from "..";
+import Auditorium from "../Auditorium";
 import Buildings from "../Buildings";
 import Connector from "../Connector";
 
@@ -19,6 +20,7 @@ export default class ShadowSettings{
         Connector.SiginUrl=v.main+v.Signin;
         Connector.ValidationUrl=v.main+v.Validation;
         Buildings.URL=v.main+v.Building;
+        Auditorium.URL=v.main+v.Auditorium;
         this.urls=v;
     }
 

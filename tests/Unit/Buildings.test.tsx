@@ -238,9 +238,9 @@ const mockResponse: Response = {
             }
           ]
     ),
-  }
+}
 
-  const mockErrResponse: Response = {
+const mockErrResponse: Response = {
     text: () =>
       Promise.resolve(
         `{
@@ -281,9 +281,9 @@ const mockResponse: Response = {
             "description": "Token is not valid"
         }
     ),
-  }
+}
 
-  const mockUndResponse: Response = {
+const mockUndResponse: Response = {
     text: () =>Promise.resolve(`<!DOCTYPE HTML>
 
     <html>
@@ -475,80 +475,93 @@ const mockResponse: Response = {
         </body>
     
     </html>`)),
-  }
-  const semafore:{[key:string]:{wait:Promise<void>, fetch:Promise<Response>, end:boolean, onEnd?:()=>void}}={};
-  describe('Buildings', ()=>{
-    semafore.normalConn={
-        wait:new Promise(resolve=>{
-          resolve();
-        }),
-        fetch:Promise.resolve(mockResponse),
-        end:false
-      };
-    semafore.ErrCon={
-        wait:new Promise(resolve=>{
-          if(semafore.normalConn){
-            semafore.normalConn.onEnd=()=>{
-              resolve();
-            }            
-          }else{
-            resolve();
-          }
-        }),
-        fetch:Promise.resolve(mockErrResponse),
-        end:false
-      };
-    semafore.UndCon={
-        wait:new Promise(resolve=>{
-          if(semafore.ErrCon){
-            semafore.ErrCon.onEnd=()=>{
-              resolve();
-            }            
-          }else{
-            resolve();
-          }
-        }),
-        fetch:Promise.resolve(mockUndResponse),
-        end:false
-      };
+}
+const semafore:{[key:string]:{wait:Promise<void>, fetch:Promise<Response>, end:boolean, onEnd?:()=>void}}={};
 
-    test('normal load', async()=>{
+function configureSemafore(){
+  semafore.normalConn={
+      wait:new Promise(resolve=>{
+        resolve();
+      }),
+      fetch:Promise.resolve(mockResponse),
+      end:false
+  };
+  semafore.ErrCon={
+      wait:new Promise(resolve=>{
+        if(semafore.normalConn){
+          semafore.normalConn.onEnd=()=>{
+            resolve();
+          }            
+        }else{
+          resolve();
+        }
+      }),
+      fetch:Promise.resolve(mockErrResponse),
+      end:false
+  };
+  semafore.UndCon={
+      wait:new Promise(resolve=>{
+        if(semafore.ErrCon){
+          semafore.ErrCon.onEnd=()=>{
+            resolve();
+          }            
+        }else{
+          resolve();
+        }
+      }),
+      fetch:Promise.resolve(mockUndResponse),
+      end:false
+  };
+
+}
+
+describe('Buildings', ()=>{
+  configureSemafore();
+
+  test('normal load', async()=>{
         await semafore.normalConn.wait;
         global.fetch =jest.fn(() =>semafore.normalConn.fetch.then()); 
         await Buildings.Load();
-        expect(Buildings.Buildings.length).toBe(25);
         semafore.normalConn.end=true;
         if(semafore.normalConn.onEnd)semafore.normalConn.onEnd();
-    })
+        expect(Buildings.Buildings.length).toBe(25);
+        
+  })
 
-    test('error connection', async ()=>{        
+  test('error connection', async ()=>{        
         await semafore.ErrCon.wait;        
         global.fetch = jest.fn(() => semafore.ErrCon.fetch);
         try{
             await Buildings.Load();
+            semafore.ErrCon.end=true; 
+            if(semafore.ErrCon.onEnd)semafore.ErrCon.onEnd();
             throw new Error('test be are incorrect!')
         }catch(er){
             const err=er as any;
+            semafore.ErrCon.end=true; 
+            if(semafore.ErrCon.onEnd)semafore.ErrCon.onEnd();
             expect(err.message).toBe('Unauthorized (Token is not valid)');
             expect(err['cause']).toStrictEqual({code: 403, description: "Token is not valid", status: "FORBIDDEN"});           
         }
         
-        semafore.ErrCon.end=true; 
-        if(semafore.ErrCon.onEnd)semafore.ErrCon.onEnd();
-    })
+        
+  })
 
-    test('error udefinded', async ()=>{        
+  test('error udefinded', async ()=>{        
         await semafore.UndCon.wait;        
         global.fetch = jest.fn(() => semafore.UndCon.fetch);
         try{
             await Buildings.Load();
+            semafore.UndCon.end=true; 
+            if(semafore.UndCon.onEnd)semafore.UndCon.onEnd();
             throw new Error('test be are incorrect!')
         }catch(er){
             const err=er as any;
+            semafore.UndCon.end=true; 
+            if(semafore.UndCon.onEnd)semafore.UndCon.onEnd();
             expect(err.message).toBe('Unauthorized or connection lost!');         
-        }
-        
-        semafore.UndCon.end=true; 
-        if(semafore.UndCon.onEnd)semafore.UndCon.onEnd();
-    })
-  });
+        }  
+
+  })
+  
+});

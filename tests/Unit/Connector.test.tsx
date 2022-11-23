@@ -7,7 +7,7 @@ export const URLS={
     Validation:'Validation',
     Building:'Building',
     Auditorium:'Auditorium',
-    TimeTable:'TimeTable'
+    TimeTable:'TimeTable/from/{startDt}/to/{endDt}'
 }
 
 export const Auth={

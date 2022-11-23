@@ -3,14 +3,27 @@ import Connector from "./Connector";
 
 export default class Buildings{
 
+    /**
+     * Набор информации по зданиям
+     */
     private static buldings:IBuildingResponse[]=[];
 
+    /**
+     * @readonly
+     * @property {IBuildingResponse[]} Набор информации по зданиям
+     */
     public static get Buildings():IBuildingResponse[]{
         return this.buldings;
     }
 
+    /**
+     * Адрес получения данных о зданиях
+     */
     public static URL:string;
 
+    /**
+     * Процесс загрузки данных о зданиях
+     */
     public static async Load():Promise<void>{
         try{
             const res= await fetch(Buildings.URL, {
