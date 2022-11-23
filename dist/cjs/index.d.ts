@@ -1,5 +1,8 @@
-export { default as RaspisanieSettings } from './Settings/Settings';
-export { default as RaspisanieConnector } from './Connector';
+export { default as RaspisanieSettings } from "./Settings/Settings";
+export { default as RaspisanieConnector } from "./Connector";
+export { default as RaspisanieAuditorium } from "./Auditorium";
+export { default as RaspisanieBuidings } from "./Buildings";
+export { default as Raspisanie } from "./TimeTable";
 /**Данные для аутентификации */
 export interface IAuthPost {
     /**Логин */
@@ -147,20 +150,20 @@ export interface IURLs {
      */
     main: string;
     /**
-    * Относительный адрес получения идентификатора ссесии
-    */
+     * Относительный адрес получения идентификатора ссесии
+     */
     Signin: string;
     /**
-    * Относительный адрес проверки сессии
-    */
+     * Относительный адрес проверки сессии
+     */
     Validation: string;
     /**
-    * Относительный адрес здания
-    */
+     * Относительный адрес для получения справочника по зданиям
+     */
     Building: string;
     /**
-    * Относительный адрес аудиторий
-    */
+     * Относительный адрес аудиторий
+     */
     Auditorium: string;
     /**
      * Относительный адрес расписания
