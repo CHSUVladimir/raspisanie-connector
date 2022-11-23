@@ -1,7 +1,7 @@
 import {RaspisanieConnector, RaspisanieSettings} from '../../src';
 
 
-export const URLS={
+const URLS={
     main:'main/',
     Signin:'Signin',
     Validation:'Validation',

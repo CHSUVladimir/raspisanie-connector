@@ -1,7 +1,9 @@
 
 export {default as RaspisanieSettings} from './Settings/Settings';
 export {default as RaspisanieConnector} from './Connector';
-
+export {default as RaspisanieAuditorium} from './Auditorium';
+export {default as RaspisanieBuidings} from './Buildings';
+export {default as Raspisanie} from './TimeTable';
 
 /**Данные для аутентификации */
 export interface IAuthPost{

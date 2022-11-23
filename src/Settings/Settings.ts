@@ -1,5 +1,8 @@
 import { IAuthPost, IURLs } from "..";
-import ShadowSettings from "./ShadowSettings";
+import Auditorium from "../Auditorium";
+import Buildings from "../Buildings";
+import Connector from "../Connector";
+import TimeTable from "../TimeTable";
 
 /**
  * Установка всех необходимых настроек
@@ -7,10 +10,14 @@ import ShadowSettings from "./ShadowSettings";
 export default class Settings{
 
     public static set Auth(v:IAuthPost){
-        ShadowSettings.Auth=v;
+        Connector.Auth=v;
     }
 
     public static set URLS(v:IURLs){
-        ShadowSettings.URLS=v;
+        Connector.SiginUrl=v.main+v.Signin;
+        Connector.ValidationUrl=v.main+v.Validation;
+        Buildings.URL=v.main+v.Building;
+        Auditorium.URL=v.main+v.Auditorium;
+        TimeTable.URL=v.main+v.TimeTable;
     }
 }
